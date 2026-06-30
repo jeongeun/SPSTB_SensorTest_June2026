@@ -1,0 +1,43 @@
+python3 Analysis.py --file ../1stBatch/stats_Run2_Ch0-180V_Ch1-180V_Ch2-180V_Ch3-180V_trig180V.root --tree Analysis --outdir result_1hpk/BV180 --bins 100 --dt-bins 200 --pmax-cuts 70 70 60 70 --abs-tmax-cuts 0 0 0 0 --cfd-index 1 --cfd-unit ns
+
+Batch1 HPK1 HPK3 HPK 17 HPK 18 
+(BV scan commands)
+
+python3 Analysis.py --file ../1stBatch/stats_Run2_Ch0-200V_Ch1-200V_Ch2-200V_Ch3-200V_trig180V.root --tree Analysis --outdir result_1hpk/BV200 --bins 100 --dt-bins 150 --pmax-cuts 70 70 60 100 --cfd-index 1 --cfd-unit ns
+
+python3 Analysis.py --file ../1stBatch/stats_Run2_Ch0-195V_Ch1-195V_Ch2-195V_Ch3-195V_trig180V.root --tree Analysis --outdir result_1hpk/BV195 --bins 100 --dt-bins 150 --pmax-cuts 70 70 60 100 --cfd-index 1 --cfd-unit ns
+
+python Analysis.py \
+  --file stats_Run2_Ch0-200V_Ch1-200V_Ch2-200V_Ch3-200V_trig180V.root \
+  --tree Analysis \
+  --outdir results/BV200 \
+  --pmax-cuts 40 40 40 40 \
+  --cfd-index 1 \
+  --cfd-unit ns
+
+
+python Analysis.py --file run_BV180.root --tree Analysis --outdir results/BV180 --bins 100 --dt-bins 200 --pmax-cuts 4 4 4 4 --cfd-index 1 --cfd-unit ns
+python Analysis.py --file run_BV200.root --tree Analysis --outdir results/BV200 --bins 100 --dt-bins 200 --pmax-cuts 4 4 4 4 --cfd-index 1 --cfd-unit ns
+python Analysis.py --file run_BV220.root --tree Analysis --outdir results/BV220 --bins 100 --dt-bins 200 --pmax-cuts 4 4 4 4 --cfd-index 1 --cfd-unit ns
+python Analysis.py --file run_BV240.root --tree Analysis --outdir results/BV240 --bins 100 --dt-bins 200 --pmax-cuts 4 4 4 4 --cfd-index 1 --cfd-unit ns
+
+
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="6-channel DUT timing post-processing from ROOT Analysis tree")
+    parser.add_argument("--file", required=True, help="Input ROOT file")
+    parser.add_argument("--tree", default="Analysis", help="TTree name (default: Analysis)")
+    parser.add_argument("--outdir", default="plots", help="Output directory")
+    parser.add_argument("--bins", type=int, default=100, help="Bins for pmax/tmax/area histograms")
+    parser.add_argument("--dt-bins", type=int, default=200, help="Bins for deltaT histograms")
+    parser.add_argument("--dt-range", type=float, nargs=2, default=None, metavar=("LO_PS", "HI_PS"), help="Global x-range for deltaT plots [ps]")
+    parser.add_argument("--fit-half-range", type=float, default=1000.0, help="Fit range around each deltaT median: median ± value [ps]")
+    parser.add_argument("--cfd-index", type=int, default=1, help="CFD index. Use 1 for CFD20 if [10,20,30,...] ordering")
+    parser.add_argument("--cfd-unit", choices=["ns", "ps"], default="ns", help="Unit stored in cfd branch. Default ns; output deltaT is ps")
+    parser.add_argument("--pmax-cuts", type=float, nargs=4, default=[0.0, 0.0, 0.0, 0.0], metavar=("DUT1", "DUT2", "DUT3", "DUT4"), help="Lower pmax_fit cuts for DUT1..DUT4")
+    parser.add_argument("--pmax-cut-highs", type=float, nargs=4, default=None, metavar=("DUT1", "DUT2", "DUT3", "DUT4"), help="Optional upper pmax_fit cuts for DUT1..DUT4; use 0 for no upper cut")
+    parser.add_argument("--delta-no-pmax-cuts", action="store_true", help="Use all finite events for deltaT instead of applying pairwise pmax cuts")
+    args = parser.parse_args()
+
+    ensure_dir(args.outdir)

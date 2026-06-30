@@ -1,0 +1,5 @@
+DUT,pmax_cut_low,pmax_cut_high,before_entries,after_entries
+DUT1,40.0,0.0,60000,4271
+DUT2,40.0,0.0,60000,2998
+DUT3,40.0,0.0,60000,3346
+DUT4,40.0,0.0,60000,2803
