@@ -241,7 +241,7 @@ def main() -> None:
     # (5) Individual DUT timing resolutions
     sigmas, variances, residuals = solve_individual_sigmas(fit_results)
     sigmas_mc, variances_mc, sigma_errors_mc, variance_errors_mc = (
-        solve_individual_sigmas_toy_mc(fit_results, n_toys=20000, seed=12345)
+        solve_individual_sigmas_toy_mc(fit_results, n_toys=2000, seed=12345)
     )
     print_individual_sigmas(
         sigmas, variances, residuals,

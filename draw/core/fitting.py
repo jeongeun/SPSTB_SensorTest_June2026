@@ -384,7 +384,7 @@ def solve_individual_sigmas(
 
 def solve_individual_sigmas_toy_mc(
     fit_results: Dict[str, FitResult],
-    n_toys: int = 20000,
+    n_toys: int = 2000,
     seed: int = 12345,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """

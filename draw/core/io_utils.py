@@ -64,25 +64,26 @@ def load_analysis_arrays(file_path: str, tree_name: str) -> Dict[str, np.ndarray
     area = np_from_uproot(arrays["area_new"])
     cfd  = np_from_uproot(arrays["cfd"])
 
-    if pmax.ndim != 2 or pmax.shape[1] < 6:
-        raise ValueError(f"pmax_fit must have shape (N, >=6). Got: {pmax.shape}")
-    if tmax.ndim != 2 or tmax.shape[1] < 6:
-        raise ValueError(f"tmax_fit must have shape (N, >=6). Got: {tmax.shape}")
-    if area.ndim != 2 or area.shape[1] < 6:
-        raise ValueError(f"area_new must have shape (N, >=6). Got: {area.shape}")
+    if pmax.ndim != 2 or pmax.shape[1] < 4:
+        raise ValueError(f"pmax_fit must have shape (N, >=4). Got: {pmax.shape}")
+    if tmax.ndim != 2 or tmax.shape[1] < 4:
+        raise ValueError(f"tmax_fit must have shape (N, >=4). Got: {tmax.shape}")
+    if area.ndim != 2 or area.shape[1] < 4:
+        raise ValueError(f"area_new must have shape (N, >=4). Got: {area.shape}")
 
+    n_ch = pmax.shape[1]  # raw channel count for this run (>=4; may exceed 4)
     if cfd.ndim == 2:
-        if cfd.shape[1] % 6 != 0:
-            raise ValueError(f"Cannot reshape cfd with shape {cfd.shape} into (N, 6, nfrac)")
-        cfd = cfd.reshape(cfd.shape[0], 6, cfd.shape[1] // 6)
-    if cfd.ndim != 3 or cfd.shape[1] < 6:
-        raise ValueError(f"cfd must have shape (N, >=6, nfrac). Got: {cfd.shape}")
+        if cfd.shape[1] % n_ch != 0:
+            raise ValueError(f"Cannot reshape cfd with shape {cfd.shape} into (N, {n_ch}, nfrac)")
+        cfd = cfd.reshape(cfd.shape[0], n_ch, cfd.shape[1] // n_ch)
+    if cfd.ndim != 3 or cfd.shape[1] < 4:
+        raise ValueError(f"cfd must have shape (N, >=4, nfrac). Got: {cfd.shape}")
 
     return {
-        "pmax_fit": pmax[:, :6],
-        "tmax_fit": tmax[:, :6],
-        "area_new": area[:, :6],
-        "cfd":      cfd[:, :6, :],
+        "pmax_fit": pmax[:, :4],
+        "tmax_fit": tmax[:, :4],
+        "area_new": area[:, :4],
+        "cfd":      cfd[:, :4, :],
     }
 
 
