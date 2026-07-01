@@ -24,6 +24,7 @@ Pre-processed ROOT `Analysis` TTrees are read to extract pulse properties and DU
 
 ```
 SPS_June_2026/
+│
 ├── README.md
 │
 ├── draw/                          # Analysis scripts
